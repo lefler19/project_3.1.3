@@ -24,10 +24,11 @@ public class AdminController {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @GetMapping("")
     public String userList(Model model) {
         model.addAttribute("allUsers", userService.getAllUsers());
-        return "admin";
+        return "user_list";
     }
 
     @GetMapping("/user_create")
@@ -42,6 +43,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+
     @GetMapping("/user_update/{id}")
     public String updateUserFrom(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("user", userService.showUserById(id));
@@ -49,11 +51,13 @@ public class AdminController {
         return "user_update";
     }
 
+
     @PatchMapping("/user_update")
     public String updateUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/admin";
     }
+
 
     @DeleteMapping("/user_delete/{id}")
     public String deleteUser (@PathVariable("id") Integer id) {
@@ -62,17 +66,5 @@ public class AdminController {
     }
 
 
-
-
-////Ссылка будет иметь вид http://localhost:8080/admin?userId=24&action=delete при выполнении такого запроса будет удален пользователь с id=24.
-//    @PostMapping("/admin")
-//    public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Integer userId,
-//                              @RequestParam(required = true, defaultValue = "" ) String action,
-//                              Model model) {
-//        if (action.equals("delete")){
-//            userService.deleteById(userId);
-//        }
-//        return "redirect:/admin";
-//    }
 
 }

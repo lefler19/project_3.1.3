@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.entities;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,28 +15,25 @@ import java.util.Set;
 @Table(name = "roles")
  public class Role implements GrantedAuthority {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "name")
     private String name;
-//
-//    @Transient
-//@ManyToMany(mappedBy = "roles")
-//    private Set<User> users;
-//
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> userSet;
+
     public Role() {
     }
-//
-//    public Role(Integer id) {
-//        this.id = id;
-//    }
-//
-//    public Role(Integer id, String name) {
-//        this.id = id;
-//        this.name = name;
-//    }
-//
-    public int getId() {
+
+    @Override
+    public String toString() {
+        return getName().substring(getName().indexOf('_') + 1);
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -50,20 +48,27 @@ import java.util.Set;
     public void setName(String name) {
         this.name = name;
     }
-//
-//    public Set<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
-//    }
-//
-//
-//////Имя роли должно соответствовать шаблону: «ROLE_ИМЯ», например, ROLE_USER
+
+    public Set<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
+    public Role(String name, Set<User> userSet) {
+        this.name = name;
+        this.userSet = userSet;
+    }
+
     @Override
     public String getAuthority() {
-        return getName();
+        return name;
     }
 }
 

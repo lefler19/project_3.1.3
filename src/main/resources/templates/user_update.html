@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="#" th:action="@{/admin/user_update}" th:object="${user}" th:method="PATCH">
+<form  th:action="@{/admin/user_update}" th:object="${user}" th:method="PATCH">
 
     <label for="id">ID</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">

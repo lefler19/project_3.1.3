@@ -17,22 +17,19 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    private final SuccessUserHandler successUserHandler;
-    private UserService userService;
+   private final SuccessUserHandler successUserHandler;
+    private final UserService userService;
+
     @Autowired
-    public void setUserService(UserService userService) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
+        this.successUserHandler = successUserHandler;
         this.userService = userService;
     }
-//
-//    @Autowired
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
-//        this.successUserHandler = successUserHandler;
-//        this.userService = userService;
-//    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+        httpSecurity.csrf()
+                .disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authenticated/**").authenticated()
@@ -40,20 +37,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                //.formLogin().successHandler(successUserHandler).permitAll()
+                .formLogin().successHandler(successUserHandler).permitAll()
                 .and()
-                //ниже /КУДА ПЕРЕХОДИМ ПОСЛЕ LOGOUT (ЛОГ АУТ ПРОПИСЫВАЕМ ТАКЖЕ В /
                 .logout().logoutSuccessUrl("/").permitAll();
-
-        // Используем базовую аутентификацию
-        // Имя пользователя и пароль передаются в заголовке в зашифрованном виде
-        //   .and().httpBasic();
     }
-//    @Bean
-//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
 @Bean
 public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
