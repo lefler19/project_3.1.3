@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
-//@Transactional
 public class DetailServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 

@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.entities.User;
@@ -8,7 +9,6 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl  implements UserService {
@@ -54,7 +54,10 @@ public class UserServiceImpl  implements UserService {
 
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByUsername(email);
+    public User findByUsername(String username) {
+        if (userRepository.findByUsername(username).isEmpty()) {
+            throw new UsernameNotFoundException("Пользователь с таким именем не найден");
+        }
+        return userRepository.findByUsername(username).get();
     }
 }
