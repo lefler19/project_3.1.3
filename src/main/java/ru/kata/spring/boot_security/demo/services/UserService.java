@@ -5,8 +5,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.kata.spring.boot_security.demo.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface UserService extends UserDetailsService {
+public interface UserService  {
   void save(User user);
   void deleteById(Integer id);
 
@@ -14,8 +15,6 @@ public interface UserService extends UserDetailsService {
 
    void update(Integer id, User user);
 
-UserDetails loadUserByUsername(String username);
-
- User findByEmail(String email);
+    Optional<User> findByEmail(String email);
  List<User> getAllUsers();
 }
