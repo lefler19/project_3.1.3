@@ -12,14 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.services.DetailServiceImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
-// ru.kata.spring.boot_security.demo.services.UserService;
 
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-   private final SuccessUserHandler successUserHandler;
+    private final SuccessUserHandler successUserHandler;
     private final UserDetailsService userService;
 
     @Autowired
@@ -34,19 +33,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/authenticated/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/profile/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(successUserHandler).permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/process_login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .successHandler(successUserHandler)
+                .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/").permitAll();
+                .logout().logoutSuccessUrl("/login")
+                .permitAll();
     }
-@Bean
-public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -55,5 +60,4 @@ public PasswordEncoder passwordEncoder() {
         return authenticationProvider;
     }
 }
-
 

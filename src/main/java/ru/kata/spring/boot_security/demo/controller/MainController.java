@@ -17,9 +17,10 @@ public class MainController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
-    public String homePage() {
-        return "home";
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
     }
+
 
 }
