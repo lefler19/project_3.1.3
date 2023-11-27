@@ -33,20 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/authenticated/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/profile/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/process_login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .successHandler(successUserHandler)
-                .permitAll()
+                .formLogin().successHandler(successUserHandler).permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/login")
-                .permitAll();
+                .logout().logoutSuccessUrl("/login").permitAll();
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
