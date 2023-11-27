@@ -23,19 +23,5 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
-    @Override
-    @Transactional
-    public void save(Role role) {
-        roleRepository.save(role);
-    }
 
-    @Override
-    public void deleteById(Integer id) {
-        roleRepository.deleteById(id);
-    }
-
-    @Override
-    public Role showUserById(Integer id) {
-        return roleRepository.getOne(id);
-    }
 }

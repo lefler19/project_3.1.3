@@ -8,6 +8,7 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
 
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -21,7 +22,7 @@ public class UserController {
 
     @GetMapping(value = "")
     public String showProfile(Model model, Principal principal) {
-        model.addAttribute("user", userService.findByEmail(principal.getName()));
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "user_profile";
     }
 }
